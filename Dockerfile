@@ -16,3 +16,5 @@ ADD src /src
 WORKDIR /src
 
 RUN make
+
+ENTRYPOINT /src/rol > /dev/null 2>&1 & /bin/bash
