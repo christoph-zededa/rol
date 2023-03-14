@@ -2,7 +2,7 @@ FROM ubuntu:latest
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get update
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y dist-upgrade
-RUN DEBIAN_FRONTEND=noninteractive apt-get -y install apt-file jq curl make golang build-essential iptables
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y install apt-file jq curl make golang build-essential iptables golang-golang-x-tools vim
 
 RUN apt-file update
 
@@ -14,3 +14,5 @@ RUN download_url=$(curl -s https://api.github.com/repos/go-swagger/go-swagger/re
 ADD src /src
 
 WORKDIR /src
+
+RUN make

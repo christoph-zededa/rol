@@ -3,6 +3,7 @@ build: rolctl rol
 rolctl: webapi/swagger/swagger.json
 	swagger generate cli -f webapi/swagger/swagger.json -A rol-cmd #--skip-validation
 	go mod tidy
+	goimports -w .
 	go build -o rolctl cmd/cli/main.go
 
 rol:
