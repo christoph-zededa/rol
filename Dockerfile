@@ -2,7 +2,7 @@ FROM ubuntu:latest
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get update
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y dist-upgrade
-RUN DEBIAN_FRONTEND=noninteractive apt-get -y install apt-file jq curl make golang build-essential iptables golang-golang-x-tools vim
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y install apt-file jq curl make golang build-essential iptables golang-golang-x-tools vim net-tools telnet iproute2 socat
 
 RUN apt-file update
 
@@ -16,5 +16,13 @@ ADD src /src
 WORKDIR /src
 
 RUN make
+
+EXPOSE 8080/tcp
+
+RUN perl -pni.bak -e 's/localhost//g' appConfig.yml
+
+RUN	echo ------------------------------------------------- && \
+	echo swagger: http://localhost:8080/swagger/index.html && \
+	echo -------------------------------------------------
 
 ENTRYPOINT /src/rol > /dev/null 2>&1 & /bin/bash
