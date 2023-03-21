@@ -1,8 +1,8 @@
 FROM ubuntu:22.10
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get update
-RUN DEBIAN_FRONTEND=noninteractive apt-get -y dist-upgrade
-RUN DEBIAN_FRONTEND=noninteractive apt-get -y install apt-file jq curl make golang build-essential iptables golang-golang-x-tools vim net-tools telnet iproute2 socat
+RUN --mount=type=cache,target=/var/cache/apt DEBIAN_FRONTEND=noninteractive apt-get -y dist-upgrade
+RUN --mount=type=cache,target=/var/cache/apt DEBIAN_FRONTEND=noninteractive apt-get -y install apt-file jq curl make golang build-essential iptables golang-golang-x-tools vim net-tools telnet iproute2 socat bridge-utils
 
 RUN apt-file update
 
@@ -25,4 +25,4 @@ RUN	echo ------------------------------------------------- && \
 	echo swagger: http://localhost:8080/swagger/index.html && \
 	echo -------------------------------------------------
 
-ENTRYPOINT /src/rol > /dev/null 2>&1 & /bin/bash
+ENTRYPOINT /src/rol > /root/rol-log.txt 2>&1 & /bin/bash
