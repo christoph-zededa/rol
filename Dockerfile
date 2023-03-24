@@ -15,6 +15,8 @@ ADD src /src
 
 WORKDIR /src
 
+RUN rm -fv go.sum
+RUN go mod tidy
 RUN --mount=type=cache,target=/root/.cache/go-build make
 
 EXPOSE 8080/tcp
