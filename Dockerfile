@@ -15,7 +15,7 @@ ADD src /src
 
 WORKDIR /src
 
-RUN make
+RUN --mount=type=cache,target=/root/.cache/go-build make
 
 EXPOSE 8080/tcp
 
