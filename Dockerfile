@@ -2,7 +2,7 @@ FROM ubuntu:22.10
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get update
 RUN --mount=type=cache,target=/var/cache/apt DEBIAN_FRONTEND=noninteractive apt-get -y dist-upgrade
-RUN --mount=type=cache,target=/var/cache/apt DEBIAN_FRONTEND=noninteractive apt-get -y install apt-file jq curl make golang build-essential iptables golang-golang-x-tools vim net-tools telnet iproute2 socat bridge-utils strace iputils-ping delve atftp
+RUN --mount=type=cache,target=/var/cache/apt DEBIAN_FRONTEND=noninteractive apt-get -y install apt-file jq curl make golang build-essential iptables golang-golang-x-tools vim net-tools telnet iproute2 socat bridge-utils strace iputils-ping delve qemu-system-x86 psmisc dhcpcd-base
 
 RUN apt-file update
 
