@@ -1055,7 +1055,6 @@ definitions:
         description: Source for the field, for example query or body
         type: string
     type: object
-host: 192.168.8.118:8080
 info:
   contact:
     email: support@swagger.io
