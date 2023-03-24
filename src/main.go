@@ -4,6 +4,8 @@ package main
 import (
 	"os"
 	"path/filepath"
+	"rol/app/drivers"
+	"rol/app/providers"
 	"rol/app/services"
 	"rol/domain"
 	"rol/infrastructure"
@@ -35,7 +37,7 @@ func GetGlobalDIParameters() domain.GlobalDIParameters {
 // @license.name license(Mandatory)
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
 
-// @host localhost:8080
+// @host 192.168.8.118:8080
 // @BasePath /api/v1/
 func main() {
 	app := fx.New(
@@ -63,6 +65,14 @@ func main() {
 			infrastructure.NewGormDHCP4ConfigRepository,
 			infrastructure.NewCoreDHCP4ServerFactory,
 			infrastructure.NewProjectRepository,
+			infrastructure.NewGormDeviceRepository,
+			infrastructure.NewGormDeviceNetworkInterfaceRepository,
+			infrastructure.NewGormDevicePowerStateRepository,
+			// APP
+			// Device power drivers
+			drivers.NewDevicePOEPowerDriver,
+			// Device power driver provider
+			providers.NewDevicePowerDriverProvider,
 			// Application logic
 			services.NewEthernetSwitchService,
 			services.NewHTTPLogService,
@@ -73,8 +83,11 @@ func main() {
 			services.NewTFTPServerService,
 			services.NewProjectService,
 			// WEB API -> GIN Server
+			services.NewDeviceService,
+			// WEB
+			// API -> GIN Server
 			webapi.NewGinHTTPServer,
-			// WEB API -> GIN Controllers
+			// API -> GIN Controllers
 			controllers.NewEthernetSwitchGinController,
 			controllers.NewHTTPLogGinController,
 			controllers.NewAppLogGinController,
@@ -88,6 +101,7 @@ func main() {
 			controllers.NewTFTPServerGinController,
 			controllers.NewProjectGinController,
 			controllers.NewHostNetworkTrafficGinController,
+			controllers.NewDeviceGinController,
 		),
 		fx.Invoke(
 			//Register logrus hooks
@@ -110,6 +124,7 @@ func main() {
 			controllers.RegisterTFTPServerGinController,
 			controllers.RegisterProjectGinController,
 			controllers.RegisterHostNetworkTrafficGinController,
+			controllers.RegisterDeviceGinController,
 			//Start GIN http server
 			webapi.StartHTTPServer,
 		),
