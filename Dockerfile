@@ -2,7 +2,7 @@ FROM ubuntu:22.10
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get update
 RUN --mount=type=cache,target=/var/cache/apt DEBIAN_FRONTEND=noninteractive apt-get -y dist-upgrade
-RUN --mount=type=cache,target=/var/cache/apt DEBIAN_FRONTEND=noninteractive apt-get -y install apt-file jq curl make golang build-essential iptables golang-golang-x-tools vim net-tools telnet iproute2 socat bridge-utils strace iputils-ping
+RUN --mount=type=cache,target=/var/cache/apt DEBIAN_FRONTEND=noninteractive apt-get -y install apt-file jq curl make golang build-essential iptables golang-golang-x-tools vim net-tools telnet iproute2 socat bridge-utils strace iputils-ping delve atftp
 
 RUN apt-file update
 
@@ -22,9 +22,10 @@ RUN --mount=type=cache,target=/root/.cache/go-build make
 EXPOSE 8080/tcp
 
 RUN perl -pni.bak -e 's/localhost//g' appConfig.yml
+RUN perl -pni.bak -e 's/enp0s8/eth1/g' appConfig.yml
 
 RUN	echo ------------------------------------------------- && \
 	echo swagger: http://localhost:8080/swagger/index.html && \
 	echo -------------------------------------------------
 
-ENTRYPOINT /src/rol > /root/rol-log.txt 2>&1 & /bin/bash
+CMD /src/rol > /root/rol-log.txt 2>&1
