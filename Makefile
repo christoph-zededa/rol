@@ -4,7 +4,7 @@ all: .container_project attach
 
 .container_id:
 	docker build -t rol .
-	$(eval ID=$(shell docker run -p8080:8080/tcp --privileged -d --name rol rol))
+	$(eval ID=$(shell docker run -p8080:80/tcp --privileged -d --name rol rol))
 	echo $(ID) > .container_id
 
 .container_network: .container_id
@@ -17,7 +17,7 @@ all: .container_project attach
 .container_project: .container_network .container_id
 	$(eval ID=$(shell cat .container_id))
 	$(eval OUT=$(shell docker exec $(ID) curl -X 'POST' \
-		'http://localhost:8080/api/v1/project/' \
+		'http://localhost:80/api/v1/project/' \
 		-H 'accept: application/json' \
 		-H 'Content-Type: application/json' \
 		-d '{ "name": "project", "subnet": "10.100.0.2" }' | jq .))
@@ -27,7 +27,7 @@ all: .container_project attach
 	$(eval ID=$(shell cat .container_id))
 	$(eval TFTP=$(shell cat .container_project | jq -r .TFTPServerID))
 	$(eval OUT=$(shell docker exec $(ID) curl -X 'POST' \
-		"http://localhost:8080/api/v1/tftp/$(TFTP)/path/" \
+		"http://localhost:80/api/v1/tftp/$(TFTP)/path/" \
 		-H 'accept: application/json' \
 		-H 'Content-Type: application/json' \
 		-d '{ "actualPath": "/etc/passwd", "virtualPath": "passwd" }'))

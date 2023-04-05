@@ -23,6 +23,7 @@ EXPOSE 8080/tcp
 
 RUN perl -pni.bak -e 's/localhost//g' appConfig.yml
 RUN perl -pni.bak -e 's/enp0s8/eth1/g' appConfig.yml
+RUN perl -pni.bak -e 's/port: 8080/port: 80/g' appConfig.yml
 
 RUN	echo ------------------------------------------------- && \
 	echo swagger: http://localhost:8080/swagger/index.html && \
