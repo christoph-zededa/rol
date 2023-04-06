@@ -1,10 +1,17 @@
 FROM ubuntu:22.10
 
-RUN DEBIAN_FRONTEND=noninteractive apt-get update
-RUN --mount=type=cache,target=/var/cache/apt DEBIAN_FRONTEND=noninteractive apt-get -y dist-upgrade
-RUN --mount=type=cache,target=/var/cache/apt DEBIAN_FRONTEND=noninteractive apt-get -y install apt-file jq curl make golang build-essential iptables golang-golang-x-tools vim net-tools telnet iproute2 socat bridge-utils strace iputils-ping delve qemu-system-x86 psmisc dhcpcd-base bash-completion
+RUN --mount=type=cache,target=/var/cache/apt DEBIAN_FRONTEND=noninteractive apt-get update && \
+	apt-get -y dist-upgrade && \
+	apt-get -y install apt-file jq curl make golang build-essential iptables golang-golang-x-tools vim net-tools telnet iproute2 socat bridge-utils strace iputils-ping delve qemu-system-x86 psmisc dhcpcd-base bash-completion file unzip
 
 RUN apt-file update
+
+WORKDIR /usr/src
+ADD https://github.com/saravana815/dhtest/archive/master.zip .
+RUN unzip master.zip
+WORKDIR /usr/src/dhtest-master
+RUN make -j $(nproc)
+RUN cp -v dhtest /usr/local/bin
 
 RUN download_url=$(curl -s https://api.github.com/repos/go-swagger/go-swagger/releases/latest | \
 	jq -r '.assets[] | select(.name | contains("'"$(uname | tr '[:upper:]' '[:lower:]')"'_amd64")) | .browser_download_url') && \
